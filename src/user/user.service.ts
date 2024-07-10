@@ -1,13 +1,27 @@
 import { Injectable } from '@nestjs/common';
-import { UserDto } from './dto/user.dto';
+import { CreateUserDto } from './dto/create_user.dto';
+import { UpdateUserDto } from './dto/update_user.dto';
+import { UserRepository } from './user.repository';
+import { json } from 'stream/consumers';
 
 @Injectable()
 export class UserService {
-  create(createUserDto: UserDto) {
-    return 'This action adds a new user';
+
+  constructor(private readonly userRepository: UserRepository) { }
+
+  create(createUserDto: CreateUserDto) {
+    if(this.userRepository.findUserByEmail(createUserDto)){
+      throw new Error("usuario ja cadastrado")
+    }
+
+    this.userRepository.create(createUserDto)
+
+    return "usuario criado";
   }
 
   findAll() {
+
+
     return `This action returns all user`;
   }
 
@@ -15,7 +29,7 @@ export class UserService {
     return `This action returns a #${id} user`;
   }
 
-  update(id: number) {
+  update(id: number, updateUserDto: UpdateUserDto) {
     return `This action updates a #${id} user`;
   }
 

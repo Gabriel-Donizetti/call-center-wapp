@@ -1,11 +1,19 @@
-export abstract class GenericRepository<T> {
-    abstract getAll(): Promise<T[]>;
-  
-    abstract get(id: string): Promise<T>;
-  
-    abstract create(data: T): boolean;
-  
-    abstract update(id: string, data: T);
+import { PrismaClient } from "@prisma/client"
 
-    abstract delete(id: string);
+export abstract class GenericRepository<c, u, g> {
+    p: PrismaClient
+
+    constructor(){
+      this.p = new PrismaClient
+    }
+
+    abstract getAll(): Promise<g[]>;
+  
+    abstract get(id: string): Promise<g>;
+  
+    abstract create(data: c): boolean;
+  
+    abstract update(id: string, data: u): boolean;
+
+    abstract delete(id: string): boolean;
   }
